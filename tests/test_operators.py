@@ -108,7 +108,11 @@ def test_sigmoid(a: float) -> None:
     * It is  strictly increasing.
     """
     # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    assert 0 <= sigmoid(a) <= 1
+    # 1 - 1 / (1+e^a) = e^a / (1+e^a) = 1 / (1/e^a + 1) = 1 / (e^-a + 1)
+    assert_close(1 - sigmoid(a), sigmoid(-a))
+    assert sigmoid(0) == 0.5
+    assert sigmoid(a-100) < sigmoid(a-99)
 
 
 @pytest.mark.task0_2
@@ -116,7 +120,8 @@ def test_sigmoid(a: float) -> None:
 def test_transitive(a: float, b: float, c: float) -> None:
     """Test the transitive property of less-than (a < b and b < c implies a < c)"""
     # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    if a < b and b < c:
+        assert a < c
 
 
 @pytest.mark.task0_2
@@ -125,7 +130,9 @@ def test_symmetric() -> None:
     gives the same value regardless of the order of its input.
     """
     # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    for i in range(100):
+        for j in range(100, 200):
+            assert mul(i, j) == mul(j, i)
 
 
 @pytest.mark.task0_2
@@ -134,14 +141,20 @@ def test_distribute() -> None:
     :math:`z \times (x + y) = z \times x + z \times y`
     """
     # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    for i in range(100):
+        for j in range(100, 200):
+            for k in range(200, 300):
+                assert mul(k, add(i, j)) == add(mul(k, i), mul(k, j))
 
 
 @pytest.mark.task0_2
 def test_other() -> None:
     """Write a test that ensures some other property holds for your functions."""
     # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    # 测试反向传播：f(a) = log(a), grad_a = grad_f(a) * 1/a
+    for a in range(1, 1000):
+        for grad_f_a in range(1000):
+            assert log_back(a, grad_f_a) == grad_f_a * 1 / a
 
 
 # ## Task 0.3  - Higher-order functions
