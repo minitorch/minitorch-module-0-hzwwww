@@ -247,13 +247,44 @@ def relu_back(a: float, arg: float) -> float:
 # - sum: sum lists
 # - prod: take the product of lists
 
-def addLists():
-    pass
+def map(list: Iterable, func: Callable):
+    result = []
+    for item in list:
+        result.append(func(item))
+    return result
 
-def negList():
-    pass
+def zipWith(list_a: Iterable, list_b: Iterable, func: Callable):
+    for a, b in zip(list_a, list_b):
+        func(a, b)  
+        
+def reduce(lst: Iterable, func: Callable):
+    if len(list(lst)) == 0:
+        return 0
 
-def prod():
-    pass
+    iterator = iter(lst)
+    val = next(iterator)
+    for item in iterator:
+        val = func(val, item)
+
+    return val
+
+def addLists(list_a: Iterable[float], list_b: Iterable[float]):
+    res = []
+    
+    def ops(a: float, b: float):
+        res.append(a+b)
+        
+    zipWith(list_a, list_b, ops)
+    
+    return res
+
+def negList(list: Iterable):
+    return map(list, neg)
+
+def sum(list: Iterable):
+    return reduce(list, add)
+
+def prod(list: Iterable):
+    return reduce(list, mul)
 
 # TODO: Implement for Task 0.3.
