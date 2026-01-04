@@ -26,18 +26,23 @@ class Module:
 
     def modules(self) -> Sequence[Module]:
         """Return the direct child modules of this module."""
+        # 使用self.__dict__，直接操作底层字典，避开自定义的__setattr__、__getattr__操作
         m: Dict[str, Module] = self.__dict__["_modules"]
         return list(m.values())
 
     def train(self) -> None:
         """Set the mode of this module and all descendent modules to `train`."""
         # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        self.training = True
+        for submodule in self._modules.values():
+            submodule.training = True
 
     def eval(self) -> None:
         """Set the mode of this module and all descendent modules to `eval`."""
         # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        self.training = False
+        for submodule in self._modules.values():
+            submodule.training = False
 
     def named_parameters(self) -> Sequence[Tuple[str, Parameter]]:
         """Collect all the parameters of this module and its descendents.
@@ -48,12 +53,25 @@ class Module:
 
         """
         # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
-
+        named_parameters: Sequence[Tuple[str, Parameter]] = []
+        named_parameters.extend([(f'{name}', parameter) for name, parameter in self._parameters.items()])
+        
+        for submodule_name, submodule in self._modules.items():
+            for parameter_name, parameter in submodule.named_parameters():
+                named_parameters.append((f'{submodule_name}.{parameter_name}', parameter))
+        
+        return named_parameters
+        
     def parameters(self) -> Sequence[Parameter]:
         """Enumerate over all the parameters of this module and its descendents."""
         # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        parameters: Sequence[Parameter] = []
+        parameters.extend(self._parameters.values())
+        
+        for submodule in self._modules.values():
+            parameters.extend(submodule.parameters())
+
+        return parameters
 
     def add_parameter(self, k: str, v: Any) -> Parameter:
         """Manually add a parameter. Useful helper for scalar parameters.
