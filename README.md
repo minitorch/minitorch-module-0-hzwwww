@@ -6,3 +6,9 @@
 * Docs: https://minitorch.github.io/
 
 * Overview: https://minitorch.github.io/module0/module0/
+
+- weight_0_0：-10
+- weight_1_0：0.75
+- bias_0：4.47
+
+![alt text](image.png)
